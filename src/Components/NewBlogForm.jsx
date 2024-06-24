@@ -1,21 +1,25 @@
 import React, { useRef } from 'react';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
-
 const NewBlogForm = () => {
     const titleRef = useRef(null);
     const contentRef = useRef(null);
     const backendUrl = process.env.REACT_APP_BACKEND_URL;
+    const token = useSelector((state) => state.auth.token);
     const handleSubmit = async(e) => {
         e.preventDefault();
         const data = {
             title:titleRef.current.value,
             content:contentRef.current.value
         }   
+        console.log('Data to be submitted:', data);
+        console.log('Token:', token);
         try{
             const response = await axios.post(`${backendUrl}/blogspot/post`,data,
                 {
                     headers:{
                         'Content-Type':'application/json',
+                        'Authorization': `Bearer ${token}`
                     }
                 }
             )

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import BlogItem from "./BlogItem";
-import LoadingSpinner from "./LoadingSpinner"; // Assume you have a LoadingSpinner component
+import LoadingSpinner from "./LoadingSpinner";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 const BlogList = () => {
@@ -15,7 +15,7 @@ const BlogList = () => {
       try {
         const response = await axios.get(`${backendUrl}/blogspot/get`);
         setBlogs(response.data); // Set the fetched blog data
-        setLoading(false); // Stop loading spinner
+        setLoading(false); 
       } catch (e) {
         setError("Error fetching blogs");
         setLoading(false);
@@ -32,7 +32,7 @@ const BlogList = () => {
       <div className="text-center pt-32 p-4">
           <span className="text-3xl font-bold">Our Blogs</span>
       </div>
-      <div className="h-[85vh]">
+      <div className="h-[85vh] my-16">
         <div className="w-full my-12 mx-4 p-4 flex flex-row gap-12 flex-wrap justify-center">
             {blogs.map((blog) => (
               <BlogItem key={blog.id} blog={blog} />

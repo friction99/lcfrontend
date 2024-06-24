@@ -53,7 +53,6 @@ const Auth = () => {
                 }
             }catch(error){
                 setMessage("Registration failed");
-                dispatch(loginFailure(error))
             }
         }else{
             const data = {
@@ -73,7 +72,7 @@ const Auth = () => {
                     navigate('/blogspot')
                 } 
             }catch(error){
-                dispatch(loginFailure(error))
+                setMessage("Login failed");
             }
         }
     };
