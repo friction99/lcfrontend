@@ -3,7 +3,7 @@ import { faLinkedin,faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelopesBulk } from '@fortawesome/free-solid-svg-icons';
 const Footer = ()=>{
     return(
-        <div className="w-full flex flex-row gap-8 justify-between p-2 mt-4 items-center bg-slate-50">
+        <div className="w-full flex flex-row gap-8 justify-between p-2 mt-4 items-center">
             <div className="img w-1/3">
                  <img src="/LC_LOGO_black.png" alt="logo" className="w-60 h-20" />
             </div>

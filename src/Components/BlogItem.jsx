@@ -5,11 +5,11 @@ const BlogItem = ({ blog }) => {
     }
     return (
       <div className="m-4 p-4 rounded-lg w-[300px] shadow-md hover:shadow-lg">
-        <div className="img">
-            <img src={blog.image} alt={blog.title} className="h-[200px] rounded-lg" />
+        <div className="img mt-4">
+            <img src={blog.img_url} alt={blog.title} className="rounded-lg" />
         </div>
-        <h1 className="font-semibold text-xl">{blog.title}</h1>
-        <p>{truncateContent(blog.content,20)}</p>
+        <h1 className="font-semibold text-xl mt-4">{blog.title}</h1>
+        <p className="mt-4">{truncateContent(blog.content,20)}</p>
       </div>
     );
   };

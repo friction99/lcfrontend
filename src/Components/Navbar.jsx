@@ -16,7 +16,7 @@ const Navbar = () => {
                 </div>
                 <ul className="flex space-x-8">
                     <li className="hover:underline"><Link to="/blog">Blog</Link></li>
-                    {token && <li className="hover:underline"><Link to="/newblog">NewBlog</Link></li>}
+                    {token && <li className="hover:underline"><Link to="/newblog">Write a Blog</Link></li>}
                 </ul>
             </div>
         </div>

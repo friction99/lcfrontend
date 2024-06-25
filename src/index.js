@@ -45,7 +45,11 @@ const appRouter = createBrowserRouter(
     },
     {
       path:"/newblog",
-      element: <NewBlogForm/>,
+      element: (
+        <ProtectedRoute>
+            <NewBlogForm/>,
+        </ProtectedRoute>
+      )
     }
   ]
 )

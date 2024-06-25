@@ -27,20 +27,38 @@ const BlogList = () => {
   if (loading) return <LoadingSpinner />;
   if (error) return <div>{error}</div>;
 
-  return <>
-      <Navbar/>
-      <div className="text-center pt-32 p-4">
-          <span className="text-3xl font-bold">Our Blogs</span>
-      </div>
-      <div className="h-[85vh] my-16">
-        <div className="w-full my-12 mx-4 p-4 flex flex-row gap-12 flex-wrap justify-center">
-            {blogs.map((blog) => (
-              <BlogItem key={blog.id} blog={blog} />
-            ))}
+  return(
+  <>
+    <Navbar />
+    <div className="pt-28">
+      <div className="relative h-[85vh] w-full overflow-hidden rounded-lg">
+          <img
+            src="/blog_img.jpg"
+            alt="Background"
+            className="absolute inset-0 h-full w-full object-cover rounded-lg"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+          <div className="relative z-10 flex h-full items-center justify-end mt-24 mr-32 pr-28">
+            <h1 className="text-black text-2xl font-bold">
+              <span>"Writing is the painting of the voice."</span>
+              <span className="block mt-2">— Voltaire</span>
+            </h1>
+          </div>
         </div>
       </div>
-      <Footer/>
+      <div className="text-center p-4 my-6 flex flex-col">
+        <span className="text-2xl font-semibold">Our Blogs</span>
+      </div>
+      <div className="overflow-hidden">
+        <div className="w-full my-6 mx-auto p-4 flex flex-row gap-12 flex-wrap justify-center overflow-hidden">
+          {blogs.map((blog) => (
+            <BlogItem key={blog.id} blog={blog} />
+          ))}
+        </div>
+      </div>
+      <Footer />
   </>
+  )
 };
 
 export default BlogList;
