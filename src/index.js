@@ -13,6 +13,7 @@ import store from './utils/store';
 import {RouterProvider, createBrowserRouter} from "react-router-dom";
 import ProtectedRoute from './utils/ProtectedRoute';
 import NewBlogForm from './Components/NewBlogForm';
+import Blogdetail from './Components/Blogdetail';
 const appRouter = createBrowserRouter(
   [
     {
@@ -50,6 +51,10 @@ const appRouter = createBrowserRouter(
             <NewBlogForm/>,
         </ProtectedRoute>
       )
+    },
+    {
+      path:"/blogdetails/:id",
+      element:<Blogdetail/>
     }
   ]
 )

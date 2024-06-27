@@ -1,10 +1,10 @@
-const BlogItem = ({ blog }) => {
+const BlogItem = ({ blog,onClick }) => {
     const truncateContent = (content,wordlimit)=>{
         const words = content.split(' ');
         return (words.length > wordlimit)?words.slice(0,wordlimit).join(' ')+'...':words.join(' ');
     }
     return (
-      <div className="m-4 p-4 rounded-lg w-[300px] shadow-md hover:shadow-lg">
+      <div onClick={onClick} className="m-4 p-4 rounded-lg w-[300px] shadow-md hover:shadow-lg cursor-pointer">
         <div className="img mt-4">
             <img src={blog.img_url} alt={blog.title} className="rounded-lg" />
         </div>

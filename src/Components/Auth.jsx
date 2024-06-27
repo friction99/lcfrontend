@@ -2,6 +2,7 @@ import {useState,useRef,useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch} from "react-redux";
 import { loginSuccess,loginFailure } from "../utils/authSlice";
+import { setterid } from "../utils/authSlice";
 import Validate from "../utils/Validate";
 import axiosInstance from "../utils/axiosConfig";
 import { useSelector } from "react-redux";
@@ -48,6 +49,7 @@ const Auth = () => {
                 if (response.status === 201){
                     if(response.data.access_token){
                         dispatch(loginSuccess(response.data.access_token))
+                        dispatch(setterid(response.data.id))   
                     }
                     navigate('/blogspot')
                 }
@@ -68,6 +70,7 @@ const Auth = () => {
                 if (response.status === 200){
                     if(response.data.access_token){
                         dispatch(loginSuccess(response.data.access_token))
+                        dispatch(setterid(response.data.id)) 
                     }
                     navigate('/blogspot')
                 } 

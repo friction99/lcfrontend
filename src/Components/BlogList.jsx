@@ -4,12 +4,13 @@ import BlogItem from "./BlogItem";
 import LoadingSpinner from "./LoadingSpinner";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import { useNavigate } from "react-router-dom";
 const BlogList = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
-
+  const navigate = useNavigate();
   useEffect(() => {
     async function fetchData() {
       try {
@@ -26,7 +27,9 @@ const BlogList = () => {
 
   if (loading) return <LoadingSpinner />;
   if (error) return <div>{error}</div>;
-
+  const handleClick = (id) =>{
+    navigate(`/blogdetails/${id}`)
+  }
   return(
   <>
     <Navbar />
@@ -52,7 +55,7 @@ const BlogList = () => {
       <div className="overflow-hidden">
         <div className="w-full my-6 mx-auto p-4 flex flex-row gap-12 flex-wrap justify-center overflow-hidden">
           {blogs.map((blog) => (
-            <BlogItem key={blog.id} blog={blog} />
+            <BlogItem key={blog.id} blog={blog} onClick={() => handleClick(blog.id)}/>
           ))}
         </div>
       </div>
