@@ -120,11 +120,12 @@ const NewBlogForm = ({existingBlog}) => {
                 <span className='text-red-500 font-semibold my-2 '>{(message)?message:''}</span>
                 <button
                     type="submit"
-                    className={`p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition duration-300 ${isLoading ? 'cursor-not-allowed' : ''}`}
+                    className={`p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 max-w-16 transition duration-300 ${isLoading ? 'cursor-not-allowed' : ''}`}
                     disabled={isLoading}
                 >
                     {isLoading ? 'Submitting...' : 'Submit'}
                 </button>
+                <p className='my-4 font-semibold text-red-400'>Submit your blog and wait for its approval</p>
             </form>
             {(!existingBlog) && Footer}
         </>

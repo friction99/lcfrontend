@@ -10,7 +10,7 @@ const Auth = () => {
     const [signedIn,setSignedIn] = useState(true);
     const [forgotedPassword,setForgotPassword] = useState(true);
     const [message,setMessage] = useState(null); 
-    const username = useRef(null);
+    const fullname = useRef(null);
     const email = useRef(null);
     const password = useRef(null);
     const navigate = useNavigate();
@@ -32,11 +32,11 @@ const Auth = () => {
         const invalid = Validate(email.current.value,password.current.value);
         setMessage(invalid);
         if(invalid){
-            dispatch(loginFailure(invalid));
+            return dispatch(loginFailure(invalid));
         }
         if(signedIn){
             const data = {
-                username:username.current.value,
+                fullname:fullname.current.value,
                 email:email.current.value,
                 password:password.current.value
             }   
@@ -48,10 +48,8 @@ const Auth = () => {
                 })
                 if (response.status === 201){
                     if(response.data.access_token){
-                        dispatch(loginSuccess(response.data.access_token))
-                        dispatch(setterid(response.data.id))   
+                        setSignedIn(false);
                     }
-                    navigate('/blogspot')
                 }
             }catch(error){
                 setMessage("Registration failed");
@@ -88,13 +86,13 @@ const Auth = () => {
                     <span className="text-md mb-6">{(!forgotedPassword)?'Enter your email':"Let's get you Signed In to Our Blogs"}</span>
                 </div>
                 {signedIn && forgotedPassword &&
-                    <div className="w-full flex flex-col"><label htmlFor="username" className="mb-2 ">User Name</label>
+                    <div className="w-full flex flex-col"><label htmlFor="username" className="mb-2 ">Full Name</label>
                         <input 
                             type='text' 
-                            name='username' 
-                            id='username' 
-                            placeholder="e.g wakanadaforever123" 
-                            ref={username}
+                            name='fullname' 
+                            id='fullname' 
+                            placeholder="e.g Albus Potter" 
+                            ref={fullname}
                             className="border border-black p-4 mb-4 rounded"
                         />
                     </div>

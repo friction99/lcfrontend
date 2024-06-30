@@ -5,16 +5,23 @@ import LoadingSpinner from "./LoadingSpinner";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 const BlogList = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
   const navigate = useNavigate();
+  const token = useSelector((state) => state.auth.token);
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get(`${backendUrl}/blogspot/get`);
+        const response = await axios.get(`${backendUrl}/blogspot/get`,{
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${token}`
+          }
+        });
         setBlogs(response.data); // Set the fetched blog data
         setLoading(false); 
       } catch (e) {
@@ -23,7 +30,7 @@ const BlogList = () => {
       }
     }
     fetchData();
-  }, [backendUrl]);
+  }, [backendUrl,token]);
 
   if (loading) return <LoadingSpinner />;
   if (error) return <div>{error}</div>;

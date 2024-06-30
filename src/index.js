@@ -9,60 +9,85 @@ import BlogPage from './Pages/BlogPage';
 import BlogList from './Components/BlogList';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
-import store from './utils/store';
-import {RouterProvider, createBrowserRouter} from "react-router-dom";
+import { store, persistor } from './utils/store';
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import ProtectedRoute from './utils/ProtectedRoute';
 import NewBlogForm from './Components/NewBlogForm';
 import Blogdetail from './Components/Blogdetail';
-const appRouter = createBrowserRouter(
-  [
-    {
-      path: "/",
-      element: <Home />,
-    },
-    {
-      path: "/about",
-      element: <AboutPage/>,
-    },
-    {
-      path:"/Events",
-      element: <EventPage/>,
-    },
-    {
-      path:"/members",
-      element: <MembersPage/>,
-    },
-    {
-      path:"/blog",
-      element: <BlogPage/>,
-    },
-    {
-      path:"/blogspot",
-      element: (
-        <ProtectedRoute>
-          <BlogList/>
-        </ProtectedRoute>
-      )
-    },
-    {
-      path:"/newblog",
-      element: (
-        <ProtectedRoute>
-            <NewBlogForm/>,
-        </ProtectedRoute>
-      )
-    },
-    {
-      path:"/blogdetails/:id",
-      element:<Blogdetail/>
-    }
-  ]
-)
+import UserProfile from './Components/UserProfile';
+import { PersistGate } from 'redux-persist/integration/react';
+import AdminPanel from './Components/AdminPanel';
+import AdminLoginForm from './Components/AdminLoginForm';
+const appRouter = createBrowserRouter([
+  {
+    path: "/",
+    element: <Home />,
+  },
+  {
+    path: "/about",
+    element: <AboutPage />,
+  },
+  {
+    path: "/Events",
+    element: <EventPage />,
+  },
+  {
+    path: "/members",
+    element: <MembersPage />,
+  },
+  {
+    path: "/blog",
+    element: <BlogPage />,
+  },
+  {
+    path: "/blogspot",
+    element: (
+      <ProtectedRoute>
+        <BlogList />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/newblog",
+    element: (
+      <ProtectedRoute>
+        <NewBlogForm />,
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/blogdetails/:id",
+    element: <Blogdetail />,
+  },
+  {
+    path: "/blogspot/userProfile/:id",
+    element: (
+      <ProtectedRoute>
+        <UserProfile />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/adminpanel",
+    element: (
+      <ProtectedRoute>
+        <AdminPanel />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/admin/login",
+    element: <AdminLoginForm />,
+  }
+]);
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <Provider store={store}>
-      <RouterProvider router={appRouter}/>
-    </Provider>
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      <RouterProvider router={appRouter} />
+    </PersistGate>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function
