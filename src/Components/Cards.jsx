@@ -28,41 +28,41 @@ const Cards = () => {
     return (
         <motion.div
             ref={ref}
-            className="w-full my-6 mx-4 p-4 flex flex-row gap-8 flex-wrap justify-center"
+            className="w-full my-6 mx-4 p-4 flex flex-col md:flex-row gap-8 flex-wrap justify-center"
             initial="hidden"
             animate={inView ? "visible" : "hidden"}
             variants={containerVariants}
         >
-            <motion.div className="m-4 p-4 rounded-lg w-[300px] bg-slate-50 shadow-md hover:shadow-lg" variants={cardVariants}>
+            <motion.div className="m-4 p-4 rounded-lg w-full md:w-[300px] bg-slate-50 shadow-md hover:shadow-lg" variants={cardVariants}>
                 <div className="heading text-center my-4">
-                    <span className="font-semibold text-xl">History</span>
+                    <span className="font-semibold text-lg md:text-xl">History</span>
                 </div>
                 <div className="container">
-                    <p className="text-wrap leading-10 text-xl">The Literary Club was formed in the year 2015 with a vision to foster love for literature, creating a platform to express yourself.</p>
+                    <p className="leading-8 md:leading-10 text-base md:text-xl">The Literary Club was formed in the year 2015 with a vision to foster love for literature, creating a platform to express yourself.</p>
                 </div>
             </motion.div>
-            <motion.div className="m-4 p-4 rounded-lg w-[300px] bg-slate-50 shadow-md hover:shadow-lg" variants={cardVariants}>
+            <motion.div className="m-4 p-4 rounded-lg w-full md:w-[300px] bg-slate-50 shadow-md hover:shadow-lg" variants={cardVariants}>
                 <div className="heading text-center my-4">
-                    <span className="font-semibold text-xl">Goal</span>
+                    <span className="font-semibold text-lg md:text-xl">Goal</span>
                 </div>
                 <div className="container">
-                    <p className="text-wrap leading-10 text-xl">We aim at building an amateur literary lover to a mature literatus. Writing, speaking, and presentation are professional life mantras; we aim to enhance these skills.</p>
+                    <p className="leading-8 md:leading-10 text-base md:text-xl">We aim at building an amateur literary lover to a mature literatus. Writing, speaking, and presentation are professional life mantras; we aim to enhance these skills.</p>
                 </div>
             </motion.div>
-            <motion.div className="m-4 p-4 rounded-lg w-[300px] bg-slate-50 shadow-md hover:shadow-lg" variants={cardVariants}>
+            <motion.div className="m-4 p-4 rounded-lg w-full md:w-[300px] bg-slate-50 shadow-md hover:shadow-lg" variants={cardVariants}>
                 <div className="heading text-center my-4">
-                    <span className="font-semibold text-xl">Methodology</span>
+                    <span className="font-semibold text-lg md:text-xl">Methodology</span>
                 </div>
                 <div className="container">
-                    <p className="text-wrap leading-10 text-xl">We organize various events where we give an opportunity to participants to showcase their skills.</p>
+                    <p className="leading-8 md:leading-10 text-base md:text-xl">We organize various events where we give an opportunity to participants to showcase their skills.</p>
                 </div>
             </motion.div>
-            <motion.div className="m-4 p-4 rounded-lg w-[300px] bg-slate-50 shadow-md hover:shadow-lg" variants={cardVariants}>
+            <motion.div className="m-4 p-4 rounded-lg w-full md:w-[300px] bg-slate-50 shadow-md hover:shadow-lg" variants={cardVariants}>
                 <div className="heading text-center my-4">
-                    <span className="font-semibold text-xl">Learning</span>
+                    <span className="font-semibold text-lg md:text-xl">Learning</span>
                 </div>
                 <div className="container">
-                    <p className="text-wrap leading-10 text-xl">One can enhance their communication skills, learn to work in a team, make friends, and learn camaraderie.</p>
+                    <p className="leading-8 md:leading-10 text-base md:text-xl">One can enhance their communication skills, learn to work in a team, make friends, and learn camaraderie.</p>
                 </div>
             </motion.div>
         </motion.div>

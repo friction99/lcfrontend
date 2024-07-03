@@ -18,6 +18,8 @@ import UserProfile from './Components/UserProfile';
 import { PersistGate } from 'redux-persist/integration/react';
 import AdminPanel from './Components/AdminPanel';
 import AdminLoginForm from './Components/AdminLoginForm';
+import ProtectedAdmin from './utils/ProtectedAdmin';
+import ResetPassword from './Components/ResetPassword';
 const appRouter = createBrowserRouter([
   {
     path: "/",
@@ -70,14 +72,18 @@ const appRouter = createBrowserRouter([
   {
     path: "/adminpanel",
     element: (
-      <ProtectedRoute>
-        <AdminPanel />
-      </ProtectedRoute>
+        <ProtectedAdmin>
+          <AdminPanel />
+        </ProtectedAdmin>
     ),
   },
   {
     path: "/admin/login",
     element: <AdminLoginForm />,
+  },
+  {
+    path: "/reset_password/:token",
+    element: <ResetPassword/>
   }
 ]);
 

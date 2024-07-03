@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { logout } from '../utils/authSlice'; // Adjust the import path
-
+import { useDispatch } from 'react-redux'; 
+import { clearBlogState } from '../utils/blogSlice';
+import { clearAuthState } from '../utils/authSlice';
 const UserCard = ({ user }) => {
     const dispatch = useDispatch();
     const [link,setLink] = useState("");
@@ -9,7 +9,8 @@ const UserCard = ({ user }) => {
         setLink(user.img_url);
     },[setLink,user.img_url,user]);
     const handleLogout = () => {
-        dispatch(logout());
+        dispatch(clearAuthState());
+        dispatch(clearBlogState());
     };
 
     return (

@@ -11,22 +11,24 @@ const Navbar = () => {
     const [img,setImg] = useState("");
     useEffect(()=>{
         const fetchData = async()=>{
-            try {
-                const response = await axios.get(`${backendUrl}/blog/get/${id}`,{
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        'Authorization': `Bearer ${token}`
+            if(id){
+                try {
+                    const response = await axios.get(`${backendUrl}/blog/get/${id}`,{
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    if(response.status === 200){
+                        setImg(response.data.img_url);
                     }
-                });
-                if(response.status === 200){
-                    setImg(response.data.img_url);
+                } catch (e) {
+                    console.error("Error", e);
                 }
-            } catch (e) {
-                console.error("Error", e);
             }
-        }
+            }
         fetchData();
-    })
+    },[id,backendUrl,token]);
     return (
         <div className="fixed top-0 left-0 right-0 w-full bg-slate-50 z-50 rounded-lg shadow-md">
             <div className="flex justify-between items-center p-4 text-lg">
@@ -45,10 +47,10 @@ const Navbar = () => {
                     </li>
                     {token && (
                         <li className="hover:underline">
-                            <Link to="/newblog">Write a Blog</Link>
+                            <Link to="/newblog">New Blog</Link>
                         </li>
                     )}
-                    {(img)?(
+                    {(img && token)?(
                         <li className="rounded-full overflow-hidden w-12 h-12 hover:underline">
                             <Link to={url}>
                                 <img src={img} alt="User" className="w-full h-full object-cover" />

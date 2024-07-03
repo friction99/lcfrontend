@@ -22,7 +22,9 @@ const BlogList = () => {
             'Authorization': `Bearer ${token}`
           }
         });
-        setBlogs(response.data); // Set the fetched blog data
+        if(response.status === 200){
+           setBlogs(response.data);
+        }
         setLoading(false); 
       } catch (e) {
         setError("Error fetching blogs");
@@ -37,38 +39,38 @@ const BlogList = () => {
   const handleClick = (id) =>{
     navigate(`/blogdetails/${id}`)
   }
-  return(
-  <>
-    <Navbar />
-    <div className="pt-28">
-      <div className="relative h-[85vh] w-full overflow-hidden rounded-lg">
+  return (
+    <>
+      <Navbar />
+      <div className="pt-28">
+        <div className="relative h-[50vh] md:h-[85vh] w-full overflow-hidden rounded-lg">
           <img
             src="/blog_img.jpg"
             alt="Background"
             className="absolute inset-0 h-full w-full object-cover rounded-lg"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-          <div className="relative z-10 flex h-full items-center justify-end mt-24 mr-32 pr-28">
-            <h1 className="text-black text-2xl font-bold">
+          <div className="relative z-10 flex h-full items-center justify-center md:justify-end mt-12 md:mt-24 pr-4 md:pr-28">
+            <h1 className="text-white text-lg md:text-2xl font-bold text-center md:text-right">
               <span>"Writing is the painting of the voice."</span>
               <span className="block mt-2">— Voltaire</span>
             </h1>
           </div>
         </div>
       </div>
-      <div className="text-center p-4 my-6 flex flex-col">
-        <span className="text-2xl font-semibold">Our Blogs</span>
+      <div className="text-center p-4 my-2 flex flex-col">
+        <span className="text-xl md:text-2xl font-semibold">Our Blogs</span>
       </div>
       <div className="overflow-hidden">
-        <div className="w-full my-6 mx-auto p-4 flex flex-row gap-12 flex-wrap justify-center overflow-hidden">
+        <div className="w-full my-2 mx-auto p-4 flex flex-col md:flex-row gap-4 md:gap-12 flex-wrap justify-center overflow-hidden">
           {blogs.map((blog) => (
-            <BlogItem key={blog.id} blog={blog} onClick={() => handleClick(blog.id)}/>
+            <BlogItem key={blog.id} blog={blog} onClick={() => handleClick(blog.id)} />
           ))}
         </div>
       </div>
       <Footer />
-  </>
-  )
+    </>
+  );  
 };
 
 export default BlogList;

@@ -45,7 +45,6 @@ const UserInformation = ({ data }) => {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            console.log("userinfo",response);
             if(response.status === 201){
                 setEditMode(false);
                 window.location.reload();

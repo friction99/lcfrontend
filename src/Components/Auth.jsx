@@ -6,10 +6,11 @@ import { setterid } from "../utils/authSlice";
 import Validate from "../utils/Validate";
 import axiosInstance from "../utils/axiosConfig";
 import { useSelector } from "react-redux";
+import validateEmail from "../utils/validateEmail";
 const Auth = () => {
-    const [signedIn,setSignedIn] = useState(true);
-    const [forgotedPassword,setForgotPassword] = useState(true);
-    const [message,setMessage] = useState(null); 
+    const [signedIn,setSignedIn] = useState(false);
+    const [forgotedPassword,setForgotPassword] = useState(false);
+    const [message,setMessage] = useState(null);
     const fullname = useRef(null);
     const email = useRef(null);
     const password = useRef(null);
@@ -25,16 +26,16 @@ const Auth = () => {
     const signin = () =>{
         setSignedIn(!signedIn);
     }
-    const forgotPassword = ()=>{
+    const forgotPassword = async()=>{
         setForgotPassword(!forgotedPassword);
     };
     const handleClick = async()=>{
-        const invalid = Validate(email.current.value,password.current.value);
+        const invalid = (!forgotedPassword)?Validate(email.current.value,password.current.value):validateEmail(email.current.value);
         setMessage(invalid);
         if(invalid){
             return dispatch(loginFailure(invalid));
         }
-        if(signedIn){
+        if(!signedIn){
             const data = {
                 fullname:fullname.current.value,
                 email:email.current.value,
@@ -52,9 +53,10 @@ const Auth = () => {
                     }
                 }
             }catch(error){
-                setMessage("Registration failed");
+                setMessage(error?.response?.data?.message);
             }
-        }else{
+        }
+        else if(signedIn && (!forgotedPassword)){
             const data = {
                 email:email.current.value,
                 password:password.current.value
@@ -73,7 +75,18 @@ const Auth = () => {
                     navigate('/blogspot')
                 } 
             }catch(error){
-                setMessage("Login failed");
+                setMessage(error?.response?.data?.message);
+            }
+        }
+        else if(forgotPassword){
+            try{
+                const response = await axiosInstance.post(`${backendUrl}/forgot_password`,{email:email.current.value})
+                if(response.status === 200){
+                    setMessage('An email has been sent to your registered email address. Please check your inbox.');
+                }
+            }catch(e){
+                console.error(e);
+                setMessage(e.message);
             }
         }
     };
@@ -81,11 +94,11 @@ const Auth = () => {
         <div className="flex items-center justify-center bg-slate-50 h-screen">
             <form onSubmit={(e)=>{e.preventDefault()}}className="flex flex-col w-11/12 sm:w-8/12 md:w-6/12 lg:w-4/12 xl:w-3/12 p-6 rounded shadow-md hover:shadow-lg">
                 <div className="text-center flex flex-col">
-                    <span className="text-2xl font-bold mb-2">{!forgotedPassword?'':'Welcome'}</span>
-                    <span className="text-lg mb-4">{(!forgotedPassword)?'':'Sign In to Your Account'}</span>
-                    <span className="text-md mb-6">{(!forgotedPassword)?'Enter your email':"Let's get you Signed In to Our Blogs"}</span>
+                    <span className="text-2xl font-bold mb-2">{forgotedPassword?'':'Welcome'}</span>
+                    <span className="text-lg mb-4">{(forgotedPassword)?'':'Sign In to Your Account'}</span>
+                    <span className="text-md mb-6">{(forgotedPassword)?'Enter your email':"Let's get you Signed In to Our Blogs"}</span>
                 </div>
-                {signedIn && forgotedPassword &&
+                {(!signedIn) && (!forgotedPassword) &&
                     <div className="w-full flex flex-col"><label htmlFor="username" className="mb-2 ">Full Name</label>
                         <input 
                             type='text' 
@@ -97,17 +110,21 @@ const Auth = () => {
                         />
                     </div>
                 }                
-                <label htmlFor="email" className="mb-2">Email Address</label>
-                        <input 
-                            type='email' 
-                            name='email' 
-                            id='email' 
-                            placeholder="e.g wakanada@gmail.com"
-                            ref={email} 
-                            className="border border-black p-4 mb-4 rounded"
-                />           
                 {
-                    forgotedPassword && 
+                    <div className="w-full flex flex-col">
+                        <label htmlFor="email" className="mb-2">Email Address</label>
+                                <input 
+                                    type='email' 
+                                    name='email' 
+                                    id='email' 
+                                    placeholder="e.g wakanada@gmail.com"
+                                    ref={email} 
+                                    className="border border-black p-4 mb-4 rounded"
+                                />          
+                    </div> 
+                }
+                {
+                    (!forgotedPassword) && 
                         <div className="w-full flex flex-col">
                             <label htmlFor="password" className="mb-2">Password</label>
                             <input 
@@ -120,9 +137,9 @@ const Auth = () => {
                         </div>
                 }
                 <p className="my-1 font-bold text-red-600">{message}</p>
-                <span onClick={forgotPassword} className="cursor-pointer mb-4">{(forgotedPassword)?((!signedIn)?'Forgot Password?':''):'Remember Password?'}</span>
-                <button onClick={handleClick} className="p-4 mb-4 bg-yellow-400 rounded">{(forgotedPassword)?((signedIn)?'SignUp':'SignIn'):'Send'}</button>
-                <span onClick={signin} className="cursor-pointer">{(forgotedPassword)?((signedIn)?"Already have an account? SignIn":"Don't have an Account? SignUp"):''}</span>
+                <span onClick={forgotPassword} className="cursor-pointer mb-4">{(!forgotedPassword)?((signedIn)?'Forgot Password?':''):'Remember Password?'}</span>
+                <button onClick={handleClick} className="p-4 mb-4 bg-yellow-400 rounded">{(!forgotedPassword)?((!signedIn)?'SignUp':'SignIn'):'Send'}</button>
+                <span onClick={signin} className="cursor-pointer">{(!forgotedPassword)?((!signedIn)?"Already have an account? SignIn":"Don't have an Account? SignUp"):''}</span>
             </form>
         </div>
     )
