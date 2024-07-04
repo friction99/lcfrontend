@@ -19,7 +19,7 @@ const BlogDetail = () => {
   useEffect(() => {
     const fetchBlogData = async () => {
       try {
-        const response = await axios.get(`${backendUrl}/blog/all/${id}`, {
+        const response = await axios.get(`${backendUrl}/api/blog/all/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -43,7 +43,7 @@ const BlogDetail = () => {
     setEditMode(false);
   };
   const handleDelete = async()=>{
-    const response = await axios.delete(`${backendUrl}/blog/all/${id}`)
+    const response = await axios.delete(`${backendUrl}/api/blog/all/${id}`)
     if (response.status === 204){
       navigate('/blogspot');
     }

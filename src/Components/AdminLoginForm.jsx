@@ -29,7 +29,7 @@ const AdminLoginForm = () => {
             password
         };
         try {
-            const response = await axios.post(`${backendUrl}/admin/login`, data);
+            const response = await axios.post(`${backendUrl}/api/admin/login`, data);
             if (response.status === 200) {
                 dispatch(setteradmin(response.data.access_token));
                 navigate("/adminpanel");

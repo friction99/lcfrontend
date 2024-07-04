@@ -13,7 +13,7 @@ const BlogItem = ({ blog,onClick }) => {
     useEffect(()=>{
        const fetchData = async()=>{
           try {
-            const response = await axios.get(`${backendUrl}/blog/get/${blog.author}`);
+            const response = await axios.get(`${backendUrl}/api/blog/get/${blog.author}`);
             if(response.status === 200){
                 setUsername(response.data.fullname);
             }

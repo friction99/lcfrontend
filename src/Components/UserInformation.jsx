@@ -39,7 +39,7 @@ const UserInformation = ({ data }) => {
         formData.append('email', email);
         formData.append('image', image);
         try {
-            const response = await axios.post(`${backendUrl}/blog/get/${id}`, formData, {
+            const response = await axios.post(`${backendUrl}/api/blog/get/${id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}`

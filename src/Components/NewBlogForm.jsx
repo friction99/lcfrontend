@@ -32,7 +32,7 @@ const NewBlogForm = ({existingBlog}) => {
             formData.append('content', content);
             formData.append('image', image);
             try {
-                const response = await axios.post(`${backendUrl}/blogspot/post`, formData, {
+                const response = await axios.post(`${backendUrl}/api/blogspot/post`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         'Authorization': `Bearer ${token}`
@@ -56,7 +56,7 @@ const NewBlogForm = ({existingBlog}) => {
                 img_url : existingBlog?.img_url
             }
             try {
-                const response = await axios.patch(`${backendUrl}/blog/all/${existingBlog.id}`, data, {
+                const response = await axios.patch(`${backendUrl}/api/blog/all/${existingBlog.id}`, data, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`

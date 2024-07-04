@@ -13,7 +13,7 @@ const Navbar = () => {
         const fetchData = async()=>{
             if(id){
                 try {
-                    const response = await axios.get(`${backendUrl}/blog/get/${id}`,{
+                    const response = await axios.get(`${backendUrl}/api/blog/get/${id}`,{
                         headers: {
                             'Content-Type': 'multipart/form-data',
                             'Authorization': `Bearer ${token}`

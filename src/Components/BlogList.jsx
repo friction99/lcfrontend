@@ -16,7 +16,7 @@ const BlogList = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get(`${backendUrl}/blogspot/get`,{
+        const response = await axios.get(`${backendUrl}/api/blogspot/get`,{
           headers: {
             'Content-Type': 'multipart/form-data',
             'Authorization': `Bearer ${token}`

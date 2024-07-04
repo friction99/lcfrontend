@@ -18,7 +18,7 @@ const AdminPanel = () => {
     async function fetchData() {
       console.log(token);
       try {
-        const response = await axios.get(`${backendUrl}/blogspot/pending`,{
+        const response = await axios.get(`${backendUrl}/api/blogspot/pending`,{
           headers: {
             'Authorization': `Bearer ${token}`
           }
