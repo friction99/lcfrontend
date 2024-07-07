@@ -10,7 +10,6 @@ const AdminPanel = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const backendUrl = process.env.REACT_APP_BACKEND_URL;
   const token = useSelector((state) => state.auth.admin_token);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -18,7 +17,7 @@ const AdminPanel = () => {
     async function fetchData() {
       console.log(token);
       try {
-        const response = await axios.get(`${backendUrl}/api/blogspot/pending`,{
+        const response = await axios.get(`/api/blogspot/pending`,{
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -35,11 +34,11 @@ const AdminPanel = () => {
       }
     }
     fetchData();
-  }, [backendUrl, token]);
+  }, [token]);
 
   const handleApprove = async (id) => {
     try {
-      const response = await axios.post(`${backendUrl}/blogspot/approve/${id}`, {},{
+      const response = await axios.post(`/api/blogspot/approve/${id}`, {},{
         headers: {
           'Authorization': `Bearer ${token}`
         }

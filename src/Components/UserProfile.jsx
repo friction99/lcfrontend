@@ -9,12 +9,11 @@ import Footer from "./Footer";
 import { useSelector } from "react-redux";
 const UserProfile = ()=>{
     const {id} = useParams();
-    const backendUrl = process.env.REACT_APP_BACKEND_URL;
     const [credentials,setCredentials] = useState({});
     const token = useSelector((state) => state.auth.token);
     useEffect(()=>{
         const fetchData = async()=>{
-            const response = await axios.get(`${backendUrl}/api/blog/get/${id}`,{
+            const response = await axios.get(`/api/blog/get/${id}`,{
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}`
@@ -23,7 +22,7 @@ const UserProfile = ()=>{
             setCredentials(response.data)
         }
         fetchData();
-    },[backendUrl,id,token]);
+    },[id,token]);
     return (
         <>
             <Navbar/>

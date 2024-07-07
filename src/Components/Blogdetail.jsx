@@ -6,7 +6,6 @@ import NewBlogForm from "./NewBlogForm";
 import { useNavigate } from "react-router-dom";
 const BlogDetail = () => {
   const { id } = useParams();
-  const backendUrl = process.env.REACT_APP_BACKEND_URL;
   const token = useSelector((state) => state.auth.token);
   const [blogData, setBlogData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -19,7 +18,7 @@ const BlogDetail = () => {
   useEffect(() => {
     const fetchBlogData = async () => {
       try {
-        const response = await axios.get(`${backendUrl}/api/blog/all/${id}`, {
+        const response = await axios.get(`/api/blog/all/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -33,7 +32,7 @@ const BlogDetail = () => {
     };
 
     fetchBlogData();
-  }, [id, backendUrl, token]);
+  }, [id, token]);
 
   const handleEdit = () => {
     setEditMode(true);
@@ -43,7 +42,7 @@ const BlogDetail = () => {
     setEditMode(false);
   };
   const handleDelete = async()=>{
-    const response = await axios.delete(`${backendUrl}/api/blog/all/${id}`)
+    const response = await axios.delete(`/api/blog/all/${id}`)
     if (response.status === 204){
       navigate('/blogspot');
     }

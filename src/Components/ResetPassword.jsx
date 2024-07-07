@@ -7,7 +7,6 @@ const ResetPassword = () => {
     const { token } = useParams();
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
-    const backendUrl = process.env.REACT_APP_BACKEND_URL;
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -16,7 +15,7 @@ const ResetPassword = () => {
             return setMessage("Password should contain at least 8 characters with at least one uppercase letter, one lowercase letter, and one number.");
         }
         try {
-            const response = await axios.post(`${backendUrl}/api/reset_password/${token}`, { password });
+            const response = await axios.post(`/api/reset_password/${token}`, { password });
             console.log(response);
             if (response.status === 200) {
                 setMessage("Password updated successfully. Please log in.");

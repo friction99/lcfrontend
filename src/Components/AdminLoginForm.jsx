@@ -8,7 +8,6 @@ const AdminLoginForm = () => {
     const [message, setMessage] = useState('');
     const usernameRef = useRef(null);
     const passwordRef = useRef(null);
-    const backendUrl = process.env.REACT_APP_BACKEND_URL;
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const token = useSelector((state) => state.auth.admin_token);
@@ -29,7 +28,7 @@ const AdminLoginForm = () => {
             password
         };
         try {
-            const response = await axios.post(`${backendUrl}/api/admin/login`, data);
+            const response = await axios.post(`/api/admin/login`, data);
             if (response.status === 200) {
                 dispatch(setteradmin(response.data.access_token));
                 navigate("/adminpanel");

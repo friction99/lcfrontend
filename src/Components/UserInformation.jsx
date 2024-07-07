@@ -7,7 +7,6 @@ const UserInformation = ({ data }) => {
     const { id } = useParams();
     const [edit, setEditMode] = useState(false);
     const [message, setMessage] = useState('');
-    const backendUrl = process.env.REACT_APP_BACKEND_URL;
     const [fullname, setFullname] = useState(data.fullname || '');
     const [email, setEmail] = useState(data.email || '');
     const [firstname, setFirstname] = useState(data.firstname || '');
@@ -39,7 +38,7 @@ const UserInformation = ({ data }) => {
         formData.append('email', email);
         formData.append('image', image);
         try {
-            const response = await axios.post(`${backendUrl}/api/blog/get/${id}`, formData, {
+            const response = await axios.post(`/api/blog/get/${id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}`
