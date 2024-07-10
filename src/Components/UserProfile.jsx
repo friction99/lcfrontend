@@ -22,6 +22,7 @@ const UserProfile = ()=>{
             setCredentials(response.data)
         }
         fetchData();
+
     },[id,token]);
     return (
         <>

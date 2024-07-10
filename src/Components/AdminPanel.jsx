@@ -15,14 +15,12 @@ const AdminPanel = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     async function fetchData() {
-      console.log(token);
       try {
         const response = await axios.get(`/api/blogspot/pending`,{
           headers: {
             'Authorization': `Bearer ${token}`
           }
         });
-        console.log(response);
         if(response.status === 200){
             setBlogs(response.data);
         }

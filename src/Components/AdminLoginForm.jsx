@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { setteradmin } from '../utils/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-
+import { clearAuthState } from '../utils/authSlice';
+import { clearBlogState } from '../utils/blogSlice';
 const AdminLoginForm = () => {
     const [message, setMessage] = useState('');
     const usernameRef = useRef(null);
@@ -16,13 +17,16 @@ const AdminLoginForm = () => {
         if (token) {
             navigate("/adminpanel");
         }
-    }, [token, navigate]);
+        return ()=>{
+            dispatch(clearAuthState());
+            dispatch(clearBlogState());
+        }
+    }, [token, navigate,dispatch]);
 
     const handleClick = async (e) => {
         e.preventDefault();
         const username = usernameRef.current.value;
         const password = passwordRef.current.value;
-        console.log(username, password);
         const data = {
             username,
             password

@@ -1,4 +1,5 @@
-import React from 'react';
+// index.js
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import Home from './Components/Home';
@@ -8,7 +9,7 @@ import MembersPage from './Pages/MembersPage';
 import BlogPage from './Pages/BlogPage';
 import BlogList from './Components/BlogList';
 import reportWebVitals from './reportWebVitals';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import { store, persistor } from './utils/store';
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import ProtectedRoute from './utils/ProtectedRoute';
@@ -20,6 +21,8 @@ import AdminPanel from './Components/AdminPanel';
 import AdminLoginForm from './Components/AdminLoginForm';
 import ProtectedAdmin from './utils/ProtectedAdmin';
 import ResetPassword from './Components/ResetPassword';
+import { clearBlogState } from './utils/blogSlice';
+import { clearAuthState } from './utils/authSlice';
 const appRouter = createBrowserRouter([
   {
     path: "/",
@@ -72,9 +75,9 @@ const appRouter = createBrowserRouter([
   {
     path: "/adminpanel",
     element: (
-        <ProtectedAdmin>
-          <AdminPanel />
-        </ProtectedAdmin>
+      <ProtectedAdmin>
+        <AdminPanel />
+      </ProtectedAdmin>
     ),
   },
   {
@@ -87,16 +90,32 @@ const appRouter = createBrowserRouter([
   }
 ]);
 
+const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      dispatch(clearBlogState());
+      dispatch(clearAuthState());
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [dispatch]);
+
+  return <RouterProvider router={appRouter} />;
+};
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
-      <RouterProvider router={appRouter} />
+      <App />
     </PersistGate>
   </Provider>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
