@@ -14,6 +14,7 @@ const UserInformation = ({ data }) => {
     const [aboutme, setAboutme] = useState(data.aboutme || '');
     const [image, setImage] = useState(null);
     const token = useSelector((state) => state.auth.token);
+    const backendURL = process.env.REACT_APP_BACKEND_URL;
     useEffect(() => {
         if (data) {
             setFullname(data.fullname || '');
@@ -38,7 +39,7 @@ const UserInformation = ({ data }) => {
         formData.append('email', email);
         formData.append('image', image);
         try {
-            const response = await axios.post(`/api/blog/get/${id}`, formData, {
+            const response = await axios.post(`${backendURL}/api/blog/get/${id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}`

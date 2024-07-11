@@ -15,10 +15,11 @@ const BlogDetail = () => {
   const author_id = useSelector((state) => state.auth.user_id);
   const admin_token = useSelector((state) => state.auth.admin_token);
   const navigate = useNavigate();
+  const backendURL = process.env.REACT_APP_BACKEND_URL;
   useEffect(() => {
     const fetchBlogData = async () => {
       try {
-        const response = await axios.get(`/api/blog/all/${id}`, {
+        const response = await axios.get(`${backendURL}/api/blog/all/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -32,7 +33,7 @@ const BlogDetail = () => {
     };
 
     fetchBlogData();
-  }, [id, token]);
+  }, [id, token,backendURL]);
 
   const handleEdit = () => {
     setEditMode(true);
@@ -42,7 +43,7 @@ const BlogDetail = () => {
     setEditMode(false);
   };
   const handleDelete = async()=>{
-    const response = await axios.delete(`/api/blog/all/${id}`)
+    const response = await axios.delete(`${backendURL}/api/blog/all/${id}`)
     if (response.status === 204){
       navigate('/blogspot');
     }

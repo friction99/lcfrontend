@@ -12,10 +12,11 @@ const BlogList = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const token = useSelector((state) => state.auth.token);
+  const backendURL = process.env.REACT_APP_BACKEND_URL;
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get(`/api/blogspot/get`,{
+        const response = await axios.get(`${backendURL}/api/blogspot/get`,{
           headers: {
             'Content-Type': 'multipart/form-data',
             'Authorization': `Bearer ${token}`
@@ -31,7 +32,7 @@ const BlogList = () => {
       }
     }
     fetchData();
-  }, [token]);
+  }, [token,backendURL]);
 
   if (loading) return <LoadingSpinner />;
   if (error) return <div>{error}</div>;

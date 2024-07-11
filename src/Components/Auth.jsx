@@ -17,6 +17,7 @@ const Auth = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const token = useSelector((state) => state.auth.token);
+    const backendURL = process.env.REACT_APP_BACKEND_URL;
     useEffect(() => {
         if (token) {
             navigate('/blogspot');
@@ -41,7 +42,7 @@ const Auth = () => {
                 password:password.current.value
             }   
             try{
-                const response = await axiosInstance.post(`/api/blog/register`,data,{
+                const response = await axiosInstance.post(`${backendURL}/api/blog/register`,data,{
                     headers:{
                         'Content-Type':'application/json',
                     }
@@ -61,7 +62,7 @@ const Auth = () => {
                 password:password.current.value
             }
             try{
-                const response = await axiosInstance.post(`/api/blog/login`,data,{
+                const response = await axiosInstance.post(`${backendURL}/api/blog/login`,data,{
                     headers:{
                         'Content-Type':'application/json',
                     }
@@ -79,7 +80,7 @@ const Auth = () => {
         }
         else if(forgotPassword){
             try{
-                const response = await axiosInstance.post(`/api/forgot_password`,{email:email.current.value})
+                const response = await axiosInstance.post(`${backendURL}/api/forgot_password`,{email:email.current.value})
                 if(response.status === 200){
                     setMessage('An email has been sent to your registered email address. Please check your inbox.');
                 }

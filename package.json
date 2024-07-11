@@ -51,6 +51,5 @@
   },
   "devDependencies": {
     "tailwindcss": "^3.4.4"
-  },
-  "proxy":"http://43.204.216.6/"
+  }
 }

@@ -11,9 +11,10 @@ const UserProfile = ()=>{
     const {id} = useParams();
     const [credentials,setCredentials] = useState({});
     const token = useSelector((state) => state.auth.token);
+    const backendURL = process.env.REACT_APP_BACKEND_URL;
     useEffect(()=>{
         const fetchData = async()=>{
-            const response = await axios.get(`/api/blog/get/${id}`,{
+            const response = await axios.get(`${backendURL}/api/blog/get/${id}`,{
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}`
@@ -23,7 +24,7 @@ const UserProfile = ()=>{
         }
         fetchData();
 
-    },[id,token]);
+    },[id,token,backendURL]);
     return (
         <>
             <Navbar/>

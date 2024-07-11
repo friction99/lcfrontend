@@ -8,14 +8,14 @@ const ResetPassword = () => {
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
-
+    const backendURL = process.env.REACT_APP_BACKEND_URL;
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(password)) {
             return setMessage("Password should contain at least 8 characters with at least one uppercase letter, one lowercase letter, and one number.");
         }
         try {
-            const response = await axios.post(`/api/reset_password/${token}`, { password });
+            const response = await axios.post(`${backendURL}/api/reset_password/${token}`, { password });
             console.log(response);
             if (response.status === 200) {
                 setMessage("Password updated successfully. Please log in.");

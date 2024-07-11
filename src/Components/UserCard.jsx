@@ -12,7 +12,6 @@ const UserCard = ({ user }) => {
         dispatch(clearAuthState());
         dispatch(clearBlogState());
     };
-
     return (
         <div className="w-full max-w-sm bg-slate-50 shadow-md rounded-lg p-6 relative hover:shadow-lg">
             <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 ">

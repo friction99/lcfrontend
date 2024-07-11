@@ -16,6 +16,7 @@ const NewBlogForm = ({existingBlog}) => {
     const token = useSelector((state) => state.auth.token);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const backendURL = process.env.REACT_APP_BACKEND_URL;
     useEffect(()=>{
         if(existingBlog){
             setTitle(existingBlog.title)
@@ -31,7 +32,7 @@ const NewBlogForm = ({existingBlog}) => {
             formData.append('content', content);
             formData.append('image', image);
             try {
-                const response = await axios.post(`/api/blogspot/post`, formData, {
+                const response = await axios.post(`${backendURL}/api/blogspot/post`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         'Authorization': `Bearer ${token}`
@@ -55,7 +56,7 @@ const NewBlogForm = ({existingBlog}) => {
                 img_url : existingBlog?.img_url
             }
             try {
-                const response = await axios.patch(`/api/blog/all/${existingBlog.id}`, data, {
+                const response = await axios.patch(`${backendURL}/api/blog/all/${existingBlog.id}`, data, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`

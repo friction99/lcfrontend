@@ -9,10 +9,11 @@ const BlogItem = ({ blog,onClick }) => {
         const words = content.split(' ');
         return (words.length > wordlimit)?words.slice(0,wordlimit).join(' ')+'...':words.join(' ');
     }
+    const backendURL = process.env.REACT_APP_BACKEND_URL;
     useEffect(()=>{
        const fetchData = async()=>{
           try {
-            const response = await axios.get(`/api/blog/get/${blog.author}`);
+            const response = await axios.get(`${backendURL}/api/blog/get/${blog.author}`);
             if(response.status === 200){
                 setUsername(response.data.fullname);
             }
