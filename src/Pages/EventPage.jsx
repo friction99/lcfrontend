@@ -1,6 +1,6 @@
-import Navbar from "../Components/Navbar";
 import Events from "../Components/Events";
 import Footer from "../Components/Footer";
+import Navbar from "../Components/Navbar";
 const EventPage = ()=>{
     return(
         <div>

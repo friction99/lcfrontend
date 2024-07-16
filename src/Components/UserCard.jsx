@@ -1,19 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux'; 
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { clearBlogState } from '../utils/blogSlice';
 import { clearAuthState } from '../utils/authSlice';
 const UserCard = ({ user }) => {
-    const dispatch = useDispatch();
     const [link,setLink] = useState("");
+    const navigate = useNavigate();
+    const [message,setMessage] = useState();
+    const backendURL = process.env.REACT_APP_BACKEND_URL;
+    const dispatch = useDispatch();
     useEffect(()=>{
         setLink(user.img_url);
     },[setLink,user.img_url,user]);
-    const handleLogout = () => {
-        dispatch(clearAuthState());
-        dispatch(clearBlogState());
-    };
+    const handleLogout = async () => {
+        try {
+          await axios.post(`${backendURL}/api/logout`, {}, { withCredentials: true });
+          dispatch(clearAuthState());
+          dispatch(clearBlogState());
+          navigate('/Login');
+        } catch (error) {
+            setMessage(error?.response?.data?.message || "Authentication failed please refresh");
+        }
+      };
     return (
-        <div className="w-full max-w-sm bg-slate-50 shadow-md rounded-lg p-6 relative hover:shadow-lg">
+        <div className="w-full max-w-sm mx-auto bg-slate-50 shadow-md rounded-lg p-6 relative hover:shadow-lg">
             <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 ">
                 {user.img_url ? (
                     <img
@@ -39,6 +50,7 @@ const UserCard = ({ user }) => {
                 >
                     Logout
                 </button>
+                {message && <p className='mt-4 text-center text-red-400'>{message}</p>}
             </div>
          </div>    
     );

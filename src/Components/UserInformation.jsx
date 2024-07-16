@@ -1,10 +1,6 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import axios from "axios";
-import { useSelector } from "react-redux";
-
 const UserInformation = ({ data }) => {
-    const { id } = useParams();
     const [edit, setEditMode] = useState(false);
     const [message, setMessage] = useState('');
     const [fullname, setFullname] = useState(data.fullname || '');
@@ -13,7 +9,6 @@ const UserInformation = ({ data }) => {
     const [lastname, setLastname] = useState(data.lastname || '');
     const [aboutme, setAboutme] = useState(data.aboutme || '');
     const [image, setImage] = useState(null);
-    const token = useSelector((state) => state.auth.token);
     const backendURL = process.env.REACT_APP_BACKEND_URL;
     useEffect(() => {
         if (data) {
@@ -23,7 +18,7 @@ const UserInformation = ({ data }) => {
             setLastname(data.lastname || '');
             setAboutme(data.aboutme || '');
         }
-    }, [data,token]);
+    }, [data]);
 
     const handleImageChange = (event) => {
         setImage(event.target.files[0]);
@@ -39,10 +34,10 @@ const UserInformation = ({ data }) => {
         formData.append('email', email);
         formData.append('image', image);
         try {
-            const response = await axios.post(`${backendURL}/api/blog/get/${id}`, formData, {
+            const response = await axios.post(`${backendURL}/api/blog/get`, formData, {
+                withCredentials:true,
                 headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'Authorization': `Bearer ${token}`
+                    'Content-Type': 'multipart/form-data'
                 }
             });
             if(response.status === 201){
@@ -50,19 +45,18 @@ const UserInformation = ({ data }) => {
                 window.location.reload();
             }
         } catch (e) {
-            console.error("Error", e);
-            setMessage(e.message);
+            setMessage(e?.response?.data?.message || "An error occurred");
         }
     };
 
     return (
-        <div className="bg-slate-50 p-8 m-4">
-            <div className="bg-white my-8 p-2">
+        <div className="bg-slate-50 p-4 md:p-8 m-2 md:m-4 mt-28 md:my-2">
+            <div className="bg-white my-4 md:my-8 p-2">
                 <h1>My account</h1>
             </div>
             <h1 className="my-2">User Information</h1>
-            <form className="flex flex-col gap-8" onSubmit={handleSubmit}>
-                <div className="flex flex-row justify-evenly gap-8 w-full">
+            <form className="flex flex-col gap-4 md:gap-8" onSubmit={handleSubmit}>
+                <div className="flex flex-col md:flex-row justify-evenly gap-4 md:gap-8 w-full">
                     <div className="flex flex-col flex-grow">
                         <label className="my-2">Full Name</label>
                         <input
@@ -84,7 +78,7 @@ const UserInformation = ({ data }) => {
                         />
                     </div>
                 </div>
-                <div className="flex flex-row justify-evenly gap-8 w-full">
+                <div className="flex flex-col md:flex-row justify-evenly gap-4 md:gap-8 w-full">
                     <div className="flex flex-col flex-grow">
                         <label className="my-2">First Name</label>
                         <input
@@ -128,11 +122,12 @@ const UserInformation = ({ data }) => {
                     />
                 </div>
                 {message && <p className="my-1 font-bold text-red-600">{message}</p>}
-                {edit &&
+                {edit && (
                     <div>
-                        <button type="submit" className="p-2 m-2 bg-blue-500 rounded mr-4 text-white">Submit</button>
-                    </div>}
-                <button type="button" className="p-2 m-2 bg-blue-500 rounded mr-4 text-white max-w-12" onClick={() => { setEditMode(!edit) }}>Edit</button>
+                        <button type="submit" className="p-2 m-2 bg-green-500 rounded mr-4 text-white">Submit</button>
+                    </div>
+                )}
+                <button type="button" className="p-2 m-2 bg-green-500 rounded mr-4 text-white max-w-12" onClick={() => { setEditMode(!edit) }}>Edit</button>
             </form>
         </div>
     );

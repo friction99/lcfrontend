@@ -1,28 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { setteradmin } from '../utils/authSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
-import { clearAuthState } from '../utils/authSlice';
-import { clearBlogState } from '../utils/blogSlice';
 const AdminLoginForm = () => {
     const [message, setMessage] = useState('');
     const usernameRef = useRef(null);
     const passwordRef = useRef(null);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const token = useSelector((state) => state.auth.admin_token);
     const  backendURL = process.env.REACT_APP_BACKEND_URL;
-    useEffect(() => {
-        if (token) {
-            navigate("/adminpanel");
-        }
-        return ()=>{
-            dispatch(clearAuthState());
-            dispatch(clearBlogState());
-        }
-    }, [token, navigate,dispatch]);
-
     const handleClick = async (e) => {
         e.preventDefault();
         const username = usernameRef.current.value;
@@ -33,8 +20,9 @@ const AdminLoginForm = () => {
         };
         try {
             const response = await axios.post(`${backendURL}/api/admin/login`, data);
+            console.log(response);
             if (response.status === 200) {
-                dispatch(setteradmin(response.data.access_token));
+                dispatch(setteradmin(response.data.id));
                 navigate("/adminpanel");
             }
         } catch (e) {

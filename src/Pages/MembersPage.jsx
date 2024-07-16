@@ -1,7 +1,7 @@
 import Mentors from "../Components/Mentors";
 import Members from "../Components/Members";
-import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
+import Navbar from "../Components/Navbar";
 const MembersPage = ()=>{
     return(
         <div>

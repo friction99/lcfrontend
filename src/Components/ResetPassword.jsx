@@ -20,11 +20,10 @@ const ResetPassword = () => {
             if (response.status === 200) {
                 setMessage("Password updated successfully. Please log in.");
                 setTimeout(() => {
-                    navigate('/blog');
+                    navigate('/Login');
                 }, 2000);
             }
         } catch (e) {
-            console.log(e);
             setMessage(e?.response?.data?.message || "An error occurred");
         }
     }

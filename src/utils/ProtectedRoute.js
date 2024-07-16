@@ -1,25 +1,48 @@
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import LoadingSpinner from '../Components/LoadingSpinner';
 import { useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
-import { useDispatch } from 'react-redux';
-import { clearAuthState } from './authSlice';
+
 const ProtectedRoute = ({ children }) => {
-    const token = useSelector((state) => state.auth.token);
-    const dispatch = useDispatch();
-    if (!token) {
-        return <Navigate to="/blog" />;
-    }
-    try{
-        const {exp} = jwtDecode(token);
-        if (Date.now() >= exp * 1000){
-            dispatch(clearAuthState());
-            return <Navigate to="/" />;
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const backendURL = process.env.REACT_APP_BACKEND_URL;
+  const navigate = useNavigate();
+  const role = useSelector((state) => state.auth.admin_id);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      if (role) {
+        setIsAuthenticated(true);
+        return;
+      }
+
+      try {
+        const response = await axios.get(`${backendURL}/api/check-auth`, { withCredentials: true });
+        if (response.data.message === 'Authenticated') {
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
         }
-    }catch(e){
-        dispatch(clearAuthState());
-        return <Navigate to="/" />;
+      } catch (error) {
+        setIsAuthenticated(false);
+      }
+    };
+
+    checkAuth();
+  }, [backendURL, role]);
+
+  useEffect(() => {
+    if (isAuthenticated === false) {
+      navigate('/Login');
     }
-    return children;
+  }, [isAuthenticated, navigate]);
+
+  if (isAuthenticated === null) {
+    return <LoadingSpinner />;
+  }
+
+  return children;
 };
 
 export default ProtectedRoute;

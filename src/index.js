@@ -1,51 +1,46 @@
-// index.js
-import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import Home from './Components/Home';
-import AboutPage from './Pages/AboutPage';
-import EventPage from './Pages/EventPage';
-import MembersPage from './Pages/MembersPage';
-import BlogPage from './Pages/BlogPage';
 import BlogList from './Components/BlogList';
 import reportWebVitals from './reportWebVitals';
-import { Provider, useDispatch } from 'react-redux';
-import { store, persistor } from './utils/store';
+import { Provider } from 'react-redux';
+import { store } from './utils/store';
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import ProtectedRoute from './utils/ProtectedRoute';
 import NewBlogForm from './Components/NewBlogForm';
 import Blogdetail from './Components/Blogdetail';
 import UserProfile from './Components/UserProfile';
-import { PersistGate } from 'redux-persist/integration/react';
 import AdminPanel from './Components/AdminPanel';
 import AdminLoginForm from './Components/AdminLoginForm';
 import ProtectedAdmin from './utils/ProtectedAdmin';
 import ResetPassword from './Components/ResetPassword';
-import { clearBlogState } from './utils/blogSlice';
-import { clearAuthState } from './utils/authSlice';
+import LoginPage from './Pages/LoginPage';
+import AboutPage from './Pages/AboutPage';
+import MembersPage from './Pages/MembersPage';
+import EventPage from './Pages/EventPage';
 const appRouter = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
   },
   {
-    path: "/about",
-    element: <AboutPage />,
+    path:"/About",
+    element:<AboutPage />
   },
   {
-    path: "/Events",
-    element: <EventPage />,
+    path:'/Members',
+    element:<MembersPage />
   },
   {
-    path: "/members",
-    element: <MembersPage />,
+    path:"/Events",
+    element:<EventPage />
   },
   {
-    path: "/blog",
-    element: <BlogPage />,
+    path:"/Login",
+    element:<LoginPage />,
   },
   {
-    path: "/blogspot",
+    path: "/blogs",
     element: (
       <ProtectedRoute>
         <BlogList />
@@ -62,10 +57,10 @@ const appRouter = createBrowserRouter([
   },
   {
     path: "/blogdetails/:id",
-    element: <Blogdetail />,
+    element: (<ProtectedRoute><Blogdetail/></ProtectedRoute>)
   },
   {
-    path: "/blogspot/userProfile/:id",
+    path: "/blogspot/userProfile",
     element: (
       <ProtectedRoute>
         <UserProfile />
@@ -90,31 +85,10 @@ const appRouter = createBrowserRouter([
   }
 ]);
 
-const App = () => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      dispatch(clearBlogState());
-      dispatch(clearAuthState());
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, [dispatch]);
-
-  return <RouterProvider router={appRouter} />;
-};
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-      <App />
-    </PersistGate>
+       <RouterProvider router={appRouter} />
   </Provider>
 );
 

@@ -1,28 +1,21 @@
-import {useState,useRef,useEffect} from "react";
+import {useState,useRef} from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch} from "react-redux";
-import { loginSuccess,loginFailure } from "../utils/authSlice";
 import { setterid } from "../utils/authSlice";
 import Validate from "../utils/Validate";
-import axiosInstance from "../utils/axiosConfig";
-import { useSelector } from "react-redux";
+import axios from "axios";
 import validateEmail from "../utils/validateEmail";
 const Auth = () => {
     const [signedIn,setSignedIn] = useState(false);
     const [forgotedPassword,setForgotPassword] = useState(false);
     const [message,setMessage] = useState(null);
+    const [send,setSend] = useState(false);
     const fullname = useRef(null);
     const email = useRef(null);
     const password = useRef(null);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const token = useSelector((state) => state.auth.token);
     const backendURL = process.env.REACT_APP_BACKEND_URL;
-    useEffect(() => {
-        if (token) {
-            navigate('/blogspot');
-        }
-    }, [token, navigate]);
     const signin = () =>{
         setSignedIn(!signedIn);
     }
@@ -33,7 +26,7 @@ const Auth = () => {
         const invalid = (!forgotedPassword)?Validate(email.current.value,password.current.value):validateEmail(email.current.value);
         setMessage(invalid);
         if(invalid){
-            return dispatch(loginFailure(invalid));
+            return setMessage(invalid);
         }
         if(!signedIn){
             const data = {
@@ -42,14 +35,16 @@ const Auth = () => {
                 password:password.current.value
             }   
             try{
-                const response = await axiosInstance.post(`${backendURL}/api/blog/register`,data,{
+                const response = await axios.post(`${backendURL}/api/blog/register`,data,{
+                    withCredentials: true,
                     headers:{
                         'Content-Type':'application/json',
                     }
                 })
+                console.log(response);
                 if (response.status === 201){
-                    if(response.data.access_token){
-                        setSignedIn(false);
+                    if(response.data.user.id){
+                        setSignedIn(true);
                     }
                 }
             }catch(error){
@@ -62,17 +57,15 @@ const Auth = () => {
                 password:password.current.value
             }
             try{
-                const response = await axiosInstance.post(`${backendURL}/api/blog/login`,data,{
+                const response = await axios.post(`${backendURL}/api/blog/login`,data,{
+                    withCredentials: true,
                     headers:{
                         'Content-Type':'application/json',
                     }
                 })
                 if (response.status === 200){
-                    if(response.data.access_token){
-                        dispatch(loginSuccess(response.data.access_token))
-                        dispatch(setterid(response.data.id)) 
-                    }
-                    navigate('/blogspot')
+                    dispatch(setterid(response.data.id))
+                    navigate('/blogs')
                 } 
             }catch(error){
                 setMessage(error?.response?.data?.message);
@@ -80,12 +73,12 @@ const Auth = () => {
         }
         else if(forgotPassword){
             try{
-                const response = await axiosInstance.post(`${backendURL}/api/forgot_password`,{email:email.current.value})
+                const response = await axios.post(`${backendURL}/api/forgot_password`,{email:email.current.value})
                 if(response.status === 200){
+                    setSend(true);
                     setMessage('An email has been sent to your registered email address. Please check your inbox.');
                 }
             }catch(e){
-                console.error(e);
                 setMessage(e.message);
             }
         }
@@ -138,7 +131,7 @@ const Auth = () => {
                 }
                 <p className="my-1 font-bold text-red-600">{message}</p>
                 <span onClick={forgotPassword} className="cursor-pointer mb-4">{(!forgotedPassword)?((signedIn)?'Forgot Password?':''):'Remember Password?'}</span>
-                <button onClick={handleClick} className="p-4 mb-4 bg-yellow-400 rounded">{(!forgotedPassword)?((!signedIn)?'SignUp':'SignIn'):'Send'}</button>
+                <button onClick={handleClick} className="p-4 mb-4 bg-yellow-400 rounded" disabled={send}>{(!forgotedPassword)?((!signedIn)?'Sign Up':'Sign In'):'Send'}</button>
                 <span onClick={signin} className="cursor-pointer">{(!forgotedPassword)?((!signedIn)?"Already have an account? SignIn":"Don't have an Account? SignUp"):''}</span>
             </form>
         </div>

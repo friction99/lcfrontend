@@ -5,44 +5,42 @@ import LoadingSpinner from "./LoadingSpinner";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 const BlogList = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const token = useSelector((state) => state.auth.token);
   const backendURL = process.env.REACT_APP_BACKEND_URL;
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get(`${backendURL}/api/blogspot/get`,{
+        const response = await axios.get(`${backendURL}/api/blogspot/get`, {
+          withCredentials: true,
           headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': `Bearer ${token}`
+            'Content-Type': 'application/json'
           }
         });
-        if(response.status === 200){
-           setBlogs(response.data);
+        if (response.status === 200) {
+          setBlogs(response.data);
         }
-        setLoading(false); 
+        setLoading(false);
       } catch (e) {
-        setError("Error fetching blogs");
+        setError('Error fetching blogs Refresh');
         setLoading(false);
       }
     }
     fetchData();
-  }, [token,backendURL]);
+  }, [backendURL]);
 
   if (loading) return <LoadingSpinner />;
-  if (error) return <div>{error}</div>;
+  if(error) return <p className='my-1 font-bold text-red-600'>{error}</p>
   const handleClick = (id) =>{
     navigate(`/blogdetails/${id}`)
   }
   return (
     <>
       <Navbar />
-      <div className="pt-28">
+      <div className="pt-24">
         <div className="relative h-[50vh] md:h-[85vh] w-full overflow-hidden rounded-lg">
           <img
             src="/blog_img.jpg"
@@ -62,7 +60,7 @@ const BlogList = () => {
         <span className="text-xl md:text-2xl font-semibold">Our Blogs</span>
       </div>
       <div className="overflow-hidden">
-        <div className="w-full my-2 mx-auto p-4 flex flex-col md:flex-row gap-4 md:gap-12 flex-wrap justify-center overflow-hidden">
+        <div className="w-full my-2 mx-auto p-4 flex flex-col md:flex-row gap-10 md:gap-4 flex-wrap justify-center overflow-hidden">
           {blogs.map((blog) => (
             <BlogItem key={blog.id} blog={blog} onClick={() => handleClick(blog.id)} />
           ))}

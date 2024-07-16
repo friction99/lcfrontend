@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import axios from 'axios';
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -13,7 +12,6 @@ const NewBlogForm = ({existingBlog}) => {
     const [image, setImage] = useState(null);
     const [message, setMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const token = useSelector((state) => state.auth.token);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const backendURL = process.env.REACT_APP_BACKEND_URL;
@@ -33,18 +31,18 @@ const NewBlogForm = ({existingBlog}) => {
             formData.append('image', image);
             try {
                 const response = await axios.post(`${backendURL}/api/blogspot/post`, formData, {
+                    withCredentials:true,
                     headers: {
-                        'Content-Type': 'multipart/form-data',
-                        'Authorization': `Bearer ${token}`
+                        'Content-Type': 'multipart/form-data'
                     }
                 });
-                dispatch(setUserId(response?.data?.blog?.author))         
+                console.log(response);
                 if(response.status === 201){
-                    navigate('/blogspot');
+                    dispatch(setUserId(response?.data?.blog?.author))
+                    setMessage("Blogpost submitted successfully,wait for its Aprroval")   
                 }
             } catch (e) {
-                console.log('There was an error!', e);
-                setMessage(`Error: ${e.response.data.message}`);
+                setMessage(`An Authentication Error occured please Refresh`);
             } finally {
                 setIsLoading(false); 
             }
@@ -57,18 +55,16 @@ const NewBlogForm = ({existingBlog}) => {
             }
             try {
                 const response = await axios.patch(`${backendURL}/api/blog/all/${existingBlog.id}`, data, {
+                    'withCredentials': true,
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
+                        'Content-Type': 'application/json'
                     }
-                });
-                console.log(existingBlog?.id,response);        
+                });     
                 if(response.status === 202){
                     navigate('/blogspot');
                 }
             } catch (e) {
-                console.log('There was an error!', e);
-                setMessage(`Error: ${e.response.data.message}`);
+                setMessage(`Error: ${e.message}`);
             } finally {
                 setIsLoading(false); 
             }
@@ -78,57 +74,59 @@ const NewBlogForm = ({existingBlog}) => {
     return (
         <>
             {(!existingBlog) && <Navbar />}
-            <form onSubmit={handleSubmit} className="flex flex-col p-4 max-w-3xl mx-auto my-8 h-[85vh] pt-24 w-8/12">
-                <label htmlFor="title" className="text-lg font-semibold mb-2">
-                    Title [{title.length}/20]:
-                </label>
+            <form onSubmit={handleSubmit} className="flex flex-col p-4 max-w-3xl mx-auto my-8 h-auto md:h-[85vh] pt-24 w-full md:w-8/12">
+            <label htmlFor="title" className="text-lg font-semibold mb-2">
+                Title [{title.length}/50]:
+            </label>
+            <input
+                type="text"
+                id="title"
+                name="title"
+                placeholder="Enter title of your Blog"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="p-2 mb-4 border rounded-lg"
+                required
+            />
+            
+            <label htmlFor="content" className="text-lg font-semibold mb-2">
+                Content [{content.length}/5000]:
+            </label>
+            <textarea
+                id="content"
+                name="content"
+                placeholder="Paste your written content here..."
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                className="p-2 mb-4 border rounded-lg h-32 md:h-64"
+                required
+            />
+            {!existingBlog && (
+                <div>
+                <label htmlFor="image" className="text-lg font-semibold mb-2">Image:</label>
                 <input
-                    type="text"
-                    id="title"
-                    name="title"
-                    placeholder="Enter title of your Blog"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    type="file"
+                    id="image"
+                    name="image"
+                    onChange={(e) => setImage(e.target.files[0])}
                     className="p-2 mb-4 border rounded-lg"
+                    accept="image/*"
                     required
                 />
-                
-                <label htmlFor="content" className="text-lg font-semibold mb-2">
-                    Content [{content.length}/2000]:
-                </label>
-                <textarea
-                    id="content"
-                    name="content"
-                    placeholder="Paste your written content here..."
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                    className="p-2 mb-4 border rounded-lg h-32"
-                    required
-                />
-                {(!existingBlog && <div>
-                    <label htmlFor="image" className="text-lg font-semibold mb-2">Image:</label>
-                    <input
-                        type="file"
-                        id="image"
-                        name="image"
-                        onChange={(e) => setImage(e.target.files[0])}
-                        className="p-2 mb-4 border rounded-lg"
-                        accept="image/*"
-                        required
-                    />
-                </div>)}
-                <span className='text-red-500 font-semibold my-2 '>{(message)?message:''}</span>
-                <button
-                    type="submit"
-                    className={`p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 max-w-16 transition duration-300 ${isLoading ? 'cursor-not-allowed' : ''}`}
-                    disabled={isLoading}
-                >
-                    {isLoading ? 'Submitting...' : 'Submit'}
-                </button>
-                <p className='my-4 font-semibold text-red-400'>Submit your blog and wait for its approval</p>
+                </div>
+            )}
+            <span className='text-red-500 font-semibold my-2'>{message ? message : ''}</span>
+            <button
+                type="submit"
+                className={`p-2 bg-green-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 ${isLoading ? 'cursor-not-allowed' : ''}`}
+                disabled={isLoading}
+            >
+                {isLoading ? 'Submitting...' : 'Submit'}
+            </button>
+            <p className='my-4 font-semibold text-red-500'>Submit your blog and wait for its approval</p>
             </form>
-            {(!existingBlog) && Footer}
-        </>
+            {(!existingBlog) && <Footer />}
+            </>
     );
 };
 

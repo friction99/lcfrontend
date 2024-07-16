@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import BlogItem from "./BlogItem"; 
 import LoadingSpinner from "./LoadingSpinner"; 
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { clearAuthState } from "../utils/authSlice";
@@ -10,7 +9,6 @@ const AdminPanel = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const token = useSelector((state) => state.auth.admin_token);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const backendURL = process.env.REACT_APP_BACKEND_URL;
@@ -19,7 +17,7 @@ const AdminPanel = () => {
       try {
         const response = await axios.get(`${backendURL}/api/blogspot/pending`,{
           headers: {
-            'Authorization': `Bearer ${token}`
+            'Content-Type': 'application/json'
           }
         });
         if(response.status === 200){
@@ -27,19 +25,18 @@ const AdminPanel = () => {
         }
         setLoading(false); 
       } catch (e) {
-        console.log(e);
         setError("Error fetching blogs");
         setLoading(false);
       }
     }
     fetchData();
-  }, [token,backendURL]);
+  }, [backendURL]);
 
   const handleApprove = async (id) => {
     try {
       const response = await axios.post(`${backendURL}/api/blogspot/approve/${id}`, {},{
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'         
         }
       });
       if(response.status === 200) {
@@ -54,6 +51,7 @@ const AdminPanel = () => {
   }
   const handleLogout = () => {
     dispatch(clearAuthState());
+
     navigate("/");
   };
   if (loading) return <LoadingSpinner />;

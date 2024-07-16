@@ -1,39 +1,43 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { useSelector } from "react-redux";
 import NewBlogForm from "./NewBlogForm";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import LoadingSpinner from "./LoadingSpinner";
+
 const BlogDetail = () => {
   const { id } = useParams();
-  const token = useSelector((state) => state.auth.token);
   const [blogData, setBlogData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editMode, setEditMode] = useState(false);
+  const [admin, setAdmin] = useState(false);
   const user_id = useSelector((state) => state.blog.user_id);
   const author_id = useSelector((state) => state.auth.user_id);
-  const admin_token = useSelector((state) => state.auth.admin_token);
+  const admin_id = useSelector((state) => state.auth.admin_id);
   const navigate = useNavigate();
   const backendURL = process.env.REACT_APP_BACKEND_URL;
+
   useEffect(() => {
+    if (admin_id) setAdmin(true);
     const fetchBlogData = async () => {
       try {
         const response = await axios.get(`${backendURL}/api/blog/all/${id}`, {
           headers: {
-            Authorization: `Bearer ${token}`
+            'Content-Type': 'application/json'
           }
         });
         setBlogData(response.data);
       } catch (e) {
-        setError(e.message);
+        setError(e.response.data.message || "Authentication failed Refresh");
       } finally {
         setLoading(false);
       }
     };
 
     fetchBlogData();
-  }, [id, token,backendURL]);
+  }, [id, backendURL, admin_id]);
 
   const handleEdit = () => {
     setEditMode(true);
@@ -42,18 +46,24 @@ const BlogDetail = () => {
   const handleCancelEdit = () => {
     setEditMode(false);
   };
-  const handleDelete = async()=>{
-    const response = await axios.delete(`${backendURL}/api/blog/all/${id}`)
-    if (response.status === 204){
-      navigate('/blogspot');
-    }
-  }
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
-  if (error) {
-    return <div>Error: {error}</div>;
+  const handleDelete = async () => {
+    try {
+      const response = await axios.delete(`${backendURL}/api/blog/all/${id}`);
+      if (response.status === 204) {
+        if (admin) {
+          navigate('/adminpanel');
+        } else {
+          navigate('/blogs');
+        }
+      }
+    } catch (error) {
+      setError("Failed to delete the blog post. Please try again.");
+    }
+  };
+
+  if (loading) {
+    return <LoadingSpinner />;
   }
 
   return (
@@ -73,12 +83,13 @@ const BlogDetail = () => {
           <div>
             <h2 className="text-2xl sm:text-4xl font-bold mb-4 text-gray-900">{blogData.title}</h2>
             <p className="text-gray-700 text-base sm:text-lg leading-relaxed">{blogData.content}</p>
-            {(blogData.author === author_id || blogData.author === user_id || admin_token) && (
+            {error && <p className="text-red-400 text-base sm:text-lg leading-relaxed">{error}</p>}
+            {(blogData.author === author_id || blogData.author === user_id || admin_id) && (
               <>
-                <button className="p-2 my-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300 mr-4" onClick={handleEdit}>
+                <button className="p-2 my-2 bg-green-600 text-white rounded-md hover:bg-blue-600 transition duration-300 mr-4" onClick={handleEdit}>
                   Edit
                 </button>
-                <button className="p-2 my-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300" onClick={() => {
+                <button className="p-2 my-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-300" onClick={() => {
                   if (window.confirm("Are you sure you want to delete this item?")) {
                     handleDelete();
                   }

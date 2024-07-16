@@ -1,14 +1,14 @@
-import Navbar from "./Navbar"
+import Navbar from "./Navbar";
+import Carousel from "./Carousel";
 import About from "./About"
-import Carousel from "./Carousel"
-import Cards from "./Cards"
 import Events from "./Events"
 import Footer from "./Footer"
-const Home = ()=>{
-    return(
+import Cards from "./Cards";
+const Home = () => {
+    return (
         <div>
-            <Navbar/>
-            <div className="pt-24 p-4"> 
+            <Navbar />
+            <div className="pt-24 p-4">
                 <Carousel/>
                 <About/>
                 <Cards/>
@@ -16,6 +16,7 @@ const Home = ()=>{
                 <Footer/>
             </div>
         </div>
-    )
+    );
 }
-export default Home 
+
+export default Home;
