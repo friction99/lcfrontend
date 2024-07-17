@@ -19,6 +19,7 @@ const ProtectedRoute = ({ children }) => {
 
       try {
         const response = await axios.get(`${backendURL}/api/check-auth`, { withCredentials: true });
+        console.log(response);
         if (response.data.message === 'Authenticated') {
           setIsAuthenticated(true);
         } else {
