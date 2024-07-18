@@ -4,7 +4,7 @@ const images = [
     './valedict/IMG_8196.jpg',
     './valedict/IMG_8233.jpg',
     './valedict/IMG_8240.jpg',
-    './valedict/IMG_8274.jpg',
+    './valedict/IMG_8274.JPG',
 ];
 const Carousel = ()=>{
     const [currentIndex,setCurrentIndex] = useState(0);
