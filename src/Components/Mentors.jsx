@@ -1,6 +1,6 @@
 import MemberCard from "./MemberCard";
 const mentors = [
-    {name:'Dr. Kapla Pati Tiwary',photo:'./members/Kpt.png',position:'Mentor'},
+    {name:'Dr. Kapla Pati Tiwary',photo:'./members/kpt.png',position:'Mentor'},
     {name:'Dr. Smita Pallavi',photo:'./members/Smita.png',position:'Mentor'}
 ]
 const Mentors = ()=>{
