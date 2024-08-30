@@ -97,11 +97,6 @@ const Navbar = () => {
                                 )}
                             </>
                         )}
-                        {!IsLoggedIn && (
-                            <li>
-                                <button className="m-2 p-2 rounded bg-red-500 text-white"><Link to="/admin/login">Admin</Link></button>
-                            </li>
-                        )}
                     </ul>
                 </div>
             </div>
