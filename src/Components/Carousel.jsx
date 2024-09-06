@@ -1,10 +1,10 @@
 import {useState,useEffect} from 'react'
 
 const images = [
-    './valedict/IMG_8196.jpg',
-    './valedict/IMG_8233.jpg',
-    './valedict/IMG_8240.jpg',
-    './valedict/IMG_8274.JPG',
+    './valedict/1.jpg',
+    './valedict/2.jpg',
+    './valedict/3.jpg',
+    './valedict/4.JPG',
 ];
 const Carousel = ()=>{
     const [currentIndex,setCurrentIndex] = useState(0);

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 
 const images = [
-    './events/lc4.png',
-    './events/lc5.png',
-    './events/lc6.png',
-    './events/lc7.png',
+    './events/e1.jpg',
+    './events/e2.jpg',
+    './events/e3.jpg',
+    './events/e4.jpg',
 ];
 
 const Events = () => {
